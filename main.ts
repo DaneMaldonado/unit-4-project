@@ -22,6 +22,23 @@ function roadOutlineFunction2 () {
     roadOutline.setPosition(80, 105)
     roadOutline.scale = 1.2
 }
+function ChooseItems () {
+    if (index == 0) {
+        planeOutlineFunction()
+    }
+    if (index == 1) {
+        treeOutlineFunction()
+    }
+    if (index == 2) {
+        skierOutlineFunction3()
+    }
+    if (index == 3) {
+        roadOutlineFunction2()
+    }
+    if (index == 4) {
+        moonOutlineFunction()
+    }
+}
 function treeOutlineFunction () {
     treeOutline = sprites.create(img`
         ................................................................................................................................................................
@@ -194,30 +211,16 @@ function moonOutlineFunction () {
         `, SpriteKind.Player)
     moonOutline.setPosition(15, 12)
 }
-function ItemsSelection () {
-    for (let value of nameslist) {
-        if (0 == nameslist[0]) {
-        	
+function ItemsSelection (targetName: string, list: any[]) {
+    for (let index = 0; index <= list.length - 1; index++) {
+        if (targetName == list[index]) {
+            return index
         }
     }
-    if (nameslist == 0) {
-        planeOutlineFunction()
-    }
-    if (nameslist == 1) {
-        treeOutlineFunction()
-    }
-    if (nameslist == 2) {
-        skierOutlineFunction3()
-    }
-    if (nameslist == 3) {
-        roadOutlineFunction2()
-    }
-    if (nameslist == 4) {
-        moonOutlineFunction()
-    }
+    return -1
 }
 function planeOutlineFunction () {
-    for (let index = 0; index < 3; index++) {
+    for (let index2 = 0; index2 < 3; index2++) {
         planeOutline = sprites.create(img`
             ....77777777.......77777..
             ....7......77.....77...7..
@@ -270,7 +273,9 @@ let moonOutline: Sprite = null
 let skierOutline: Sprite = null
 let treeOutline: Sprite = null
 let roadOutline: Sprite = null
-let nameslist = 0
+let nametofind = ""
+let index = 0
+game.splash("Winter Game Search", "Name an item from the screen")
 scene.setBackgroundImage(img`
     8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
     8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
@@ -595,11 +600,19 @@ let moon = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Player)
 moon.setPosition(15, 12)
-nameslist = [
+pause(5000)
+let nameslist = [
 "plane",
 "tree",
 "skier",
 "road",
 "moon"
 ]
-planeOutlineFunction()
+index = -1
+while (index == -1) {
+    nametofind = game.askForString("Guess an item")
+    index = ItemsSelection(nametofind, nameslist)
+}
+ChooseItems()
+pause(5000)
+game.reset()
